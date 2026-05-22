@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -31,6 +31,7 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
                 DreamyPagesScreen()
@@ -45,6 +46,7 @@ fun DreamyPagesScreen(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(BackgroundCoral)
+            .statusBarsPadding()  // <-- Recua abaixo da status bar
     ) {
         DreamyPagesTopBar()
         Column(
@@ -73,12 +75,11 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(64.dp)
-                .padding(horizontal = 16.dp),
+                .height(70.dp)
+                .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-
             Text(
                 text = "Dreamy Pages",
                 color = TextRed,
@@ -88,14 +89,13 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
                 fontStyle = FontStyle.Normal
             )
 
-            // Botão Menu com DropdownMenu
             Box {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Menu",
                     tint = TextRed,
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(45.dp)
                         .clickable { menuExpanded = true }
                 )
 
@@ -212,7 +212,6 @@ fun SobreNosSection(modifier: Modifier = Modifier) {
 fun TemasDeLivrosSection(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    // Mapa de gênero -> Activity correspondente
     val genreMap = mapOf(
         "Suspense/Mistério" to ListaLivrosSuspenseActivity::class.java,
         "Romance" to ListaLivrosRomanceActivity::class.java,

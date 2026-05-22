@@ -27,6 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ComentariosActivity : ComponentActivity() {
 
@@ -43,7 +46,8 @@ class ComentariosActivity : ComponentActivity() {
             intent.getIntExtra("livroImagem", R.drawable.verity)
 
         val libroDescricao =
-            intent.getStringExtra("livroDescricao") ?: "Verity Lowen, uma escritora em crise, aceita terminar os livros de uma autora famosa, Verity Crawford. Ao investigar seus manuscritos, descobre um diário perturbador que revela segredos sombrios sobre Verity e sua família - misturando amor, obsessão e suspense psicológico."
+            intent.getStringExtra("livroDescricao")
+                ?: "Verity Lowen, uma escritora em crise, aceita terminar os livros de uma autora famosa, Verity Crawford. Ao investigar seus manuscritos, descobre um diário perturbador que revela segredos sombrios sobre Verity e sua família - misturando amor, obsessão e suspense psicológico."
 
         setContent {
             MyApplicationTheme {
@@ -67,15 +71,11 @@ fun ComentariosScreen(
     livroDescricao: String,
     modifier: Modifier = Modifier
 ) {
-
     val context = LocalContext.current
     val prefKey = "$categoria-$livroTitulo"
 
     val sharedPreferences =
-        context.getSharedPreferences(
-            "comentarios",
-            Context.MODE_PRIVATE
-        )
+        context.getSharedPreferences("comentarios", Context.MODE_PRIVATE)
 
     var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -83,10 +83,7 @@ fun ComentariosScreen(
 
     var comentarios by remember {
         mutableStateOf(
-            sharedPreferences.getStringSet(
-                prefKey,
-                mutableSetOf()
-            )?.toList() ?: emptyList()
+            sharedPreferences.getStringSet(prefKey, mutableSetOf())?.toList() ?: emptyList()
         )
     }
 
@@ -119,7 +116,6 @@ fun ComentariosScreen(
                 )
             )
         }
-
     ) { paddingValues ->
 
         Column(
@@ -132,14 +128,10 @@ fun ComentariosScreen(
         ) {
 
             Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFFCEEEF)
-                ),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFFCEEEF)),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Row(
-                    modifier = Modifier.padding(12.dp)
-                ) {
+                Row(modifier = Modifier.padding(12.dp)) {
                     Image(
                         painter = painterResource(id = livroImagem),
                         contentDescription = livroTitulo,
@@ -210,18 +202,33 @@ fun ComentariosScreen(
                 )
             }
 
+            // Formato salvo: "nome|||dd/MM/yyyy HH:mm|||texto"
             comentarios.forEach { comentarioItem ->
-                val partes = comentarioItem.split(":\n\"", limit = 2)
-                val nomeAutor = partes.getOrNull(0) ?: "Usuário"
-                val textoComentario = partes.getOrNull(1)?.removeSuffix("\"") ?: comentarioItem
+                val partes = comentarioItem.split("|||")
+
+                val nomeAutor: String
+                val dataComentario: String
+                val textoComentario: String
+
+                if (partes.size == 3) {
+                    // Formato novo
+                    nomeAutor = partes[0]
+                    dataComentario = partes[1]
+                    textoComentario = partes[2]
+                } else {
+                    // Formato antigo (compatibilidade)
+                    val partesAntigo = comentarioItem.split(":\n\"", limit = 2)
+                    nomeAutor = partesAntigo.getOrNull(0) ?: "Usuário"
+                    dataComentario = ""
+                    textoComentario = partesAntigo.getOrNull(1)?.removeSuffix("\"") ?: comentarioItem
+                }
 
                 CommentItem(
                     nome = nomeAutor,
-                    data = "Recente",
+                    data = dataComentario,
                     texto = textoComentario
                 )
             }
-
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -281,7 +288,14 @@ fun ComentariosScreen(
             Button(
                 onClick = {
                     if (nome.isNotBlank() && comentario.isNotBlank()) {
-                        val comentarioCompleto = "$nome:\n\"$comentario\""
+                        // Data e horário no momento do envio: "dd/MM/yyyy HH:mm"
+                        val dataAtual = SimpleDateFormat(
+                            "dd/MM/yyyy HH:mm",
+                            Locale("pt", "BR")
+                        ).format(Date())
+
+                        // Formato limpo com separador ||| sem ambiguidade
+                        val comentarioCompleto = "$nome|||$dataAtual|||$comentario"
                         val novaLista = comentarios.toMutableList()
                         novaLista.add(comentarioCompleto)
                         comentarios = novaLista
@@ -294,9 +308,7 @@ fun ComentariosScreen(
                     }
                 },
                 modifier = Modifier.align(Alignment.End),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = CardHeaderRed
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = CardHeaderRed),
                 shape = RoundedCornerShape(4.dp)
             ) {
                 Text(
@@ -317,19 +329,26 @@ fun CommentItem(nome: String, data: String, texto: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFFCEEEF)
-        ),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFCEEEF)),
         shape = RoundedCornerShape(8.dp),
-        border = CardDefaults.outlinedCardBorder().copy(brush = androidx.compose.ui.graphics.SolidColor(Color(0xFFE0B0B0)))
+        border = CardDefaults.outlinedCardBorder().copy(
+            brush = androidx.compose.ui.graphics.SolidColor(Color(0xFFE0B0B0))
+        )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = "$nome - $data",
+                text = nome,
                 color = CardHeaderRed,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp
             )
+            if (data.isNotBlank()) {
+                Text(
+                    text = data,  // Exibe "dd/MM/yyyy HH:mm"
+                    color = Color.Gray,
+                    fontSize = 11.sp
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "\"$texto\"",
@@ -382,30 +401,6 @@ fun ComentariosScreenPreview() {
             categoria = "Suspense",
             livroImagem = R.drawable.verity,
             livroDescricao = "Verity Lowen, uma escritora em crise, aceita terminar os livros de uma autora famosa, Verity Crawford. Ao investigar seus manuscritos, descobre um diário perturbador que revela segredos sombrios sobre Verity e sua família - misturando amor, obsessão e suspense psicológico."
-        )
-    }
-    MyApplicationTheme {
-        ComentariosScreen(
-            livroTitulo = "A hipotese do amor",
-            categoria = "romance",
-            livroImagem = R.drawable.hipotese,
-            livroDescricao = "Uma estudante de doutorado, Olive, que finge um namoro com um professor renomado, Adam, para convencer sua melhor amiga de que está feliz no amor. O que começa como uma farsa científica se transforma em um romance real."
-        )
-    }
-    MyApplicationTheme {
-        ComentariosScreen(
-            livroTitulo = "Amor teoricamente",
-            categoria = "romance",
-            livroImagem = R.drawable.amor,
-            livroDescricao = "Elsie Hannaway finge ser namorada de aluguel para complementar a renda. Sua vida 'fake' colide com Jack Smith, um físico experimental e possível obstáculo para o emprego dos seus sonhos no MIT."
-        )
-    }
-    MyApplicationTheme {
-        ComentariosScreen(
-            livroTitulo = "O acordo ",
-            categoria = "romance",
-            livroImagem = R.drawable.acordo,
-            livroDescricao = "Hannah Wells não se interessa por Garret Graham, o capitão do time de hóquei. Para não ser expulso, Garret concorda em ajudar Hannah a fazer ciúmes no rapaz por quem ela é apaixonada."
         )
     }
 }

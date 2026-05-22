@@ -15,6 +15,13 @@
       </SelectionState>
       <SelectionState runConfigName="SuporteActivity (1)">
         <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2026-05-07T13:21:38.601335700Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=NB8XXGBEMZIR6XBQ" />
+            </handle>
+          </Target>
+        </DropdownSelection>
         <DialogSelection />
       </SelectionState>
       <SelectionState runConfigName="SuporteActivity (2)">

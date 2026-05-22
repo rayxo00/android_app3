@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -55,22 +57,19 @@ fun ListaLivrosDistopiaScreen() {
 
     val livros = listOf(
         LivroDistopia(
-            "Jogos Vorazes",
-            "Suzanne Collins",
+            "Jogos Vorazes", "Suzanne Collins",
             "Em um futuro pós-apocalíptico, a nação de Panem é dividida em 12 distritos governados com mão de ferro pela Capital. Como punição por uma revolta passada, cada distrito deve enviar dois jovens para participar dos Jogos Vorazes, um reality show mortal onde apenas um sobrevive.",
             R.drawable.jogos_vorazes,
             "https://www.amazon.com.br/Jogos-Vorazes-Suzanne-Collins/dp/8579800242"
         ),
         LivroDistopia(
-            "Estilhaça-me",
-            "Tahereh Mafi",
+            "Estilhaça-me", "Tahereh Mafi",
             "Juliette Ferrars não toca em ninguém há 264 dias. Seu toque é fatal. O Restabelecimento a mantém presa, vendo-a como uma arma em potencial. No entanto, em um mundo em ruínas, Juliette descobre que seu poder pode ser a única esperança para a resistência.",
             R.drawable.estilhaca_me,
             "https://www.amazon.com.br/Estilha%C3%A7a-me-Tahereh-Mafi/dp/8531210870"
         ),
         LivroDistopia(
-            "Divergente",
-            "Veronica Roth",
+            "Divergente", "Veronica Roth",
             "Em uma Chicago futurista, a sociedade é dividida em cinco facções dedicadas a uma virtude. Aos 16 anos, Beatrice Prior deve escolher sua facção. No entanto, ela descobre que é uma Divergente, alguém que não se encaixa em apenas um grupo e que é vista como uma ameaça ao sistema.",
             R.drawable.divergente,
             "https://www.amazon.com.br/Divergente-Veronica-Roth/dp/8579801311"
@@ -80,23 +79,13 @@ fun ListaLivrosDistopiaScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        "Livros de Distopia",
-                        fontSize = 18.sp,
-                        color = CardHeaderRed,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = { Text("Livros de Distopia", fontSize = 18.sp, color = CardHeaderRed, fontWeight = FontWeight.Bold) },
                 actions = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
                             Icon(Icons.Default.Menu, contentDescription = "Menu", tint = CardHeaderRed)
                         }
-                        DropdownMenu(
-                            expanded = menuExpanded,
-                            onDismissRequest = { menuExpanded = false }
-                        ) {
+                        DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
                             DropdownMenuItem(
                                 text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = TextRed) },
                                 onClick = {
@@ -110,16 +99,14 @@ fun ListaLivrosDistopiaScreen() {
                                 text = { Text("Favoritos", fontWeight = FontWeight.Bold, color = TextRed) },
                                 onClick = {
                                     menuExpanded = false
-                                    val intent = Intent(context, FavoritosActivity::class.java)
-                                    context.startActivity(intent)
+                                    context.startActivity(Intent(context, FavoritosActivity::class.java))
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Suporte", fontWeight = FontWeight.Bold, color = TextRed) },
                                 onClick = {
                                     menuExpanded = false
-                                    val intent = Intent(context, SuporteActivity::class.java)
-                                    context.startActivity(intent)
+                                    context.startActivity(Intent(context, SuporteActivity::class.java))
                                 }
                             )
                         }
@@ -140,8 +127,7 @@ fun ListaLivrosDistopiaScreen() {
             items(livros) { livro ->
                 DistopiaBookCard(livro) {
                     if (livro.linkCompra.isNotEmpty()) {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(livro.linkCompra))
-                        context.startActivity(intent)
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(livro.linkCompra)))
                     }
                 }
             }
@@ -152,65 +138,65 @@ fun ListaLivrosDistopiaScreen() {
 @Composable
 fun DistopiaBookCard(livro: LivroDistopia, onBuyClick: () -> Unit) {
     val context = LocalContext.current
+    val chave = montarChaveFavorito(livro.titulo, livro.autor, livro.imagemRes, "Distopia")
+    var isFavorito by remember { mutableStateOf(getFavoritos(context).contains(chave)) }
+
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                val intent = Intent(context, ComentariosActivity::class.java)
-                intent.putExtra("livroTitulo", livro.titulo)
-                intent.putExtra("categoria", "Distopia")
-                intent.putExtra("livroImagem", livro.imagemRes)
-                intent.putExtra("livroDescricao", livro.descricao)
-                context.startActivity(intent)
-            },
+        modifier = Modifier.fillMaxWidth().clickable {
+            val intent = Intent(context, ComentariosActivity::class.java)
+            intent.putExtra("livroTitulo", livro.titulo)
+            intent.putExtra("categoria", "Distopia")
+            intent.putExtra("livroImagem", livro.imagemRes)
+            intent.putExtra("livroDescricao", livro.descricao)
+            context.startActivity(intent)
+        },
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(12.dp)
-                .height(intrinsicSize = IntrinsicSize.Min)
-        ) {
+        Row(modifier = Modifier.padding(12.dp).height(intrinsicSize = IntrinsicSize.Min)) {
             Image(
                 painter = painterResource(id = livro.imagemRes),
                 contentDescription = livro.titulo,
-                modifier = Modifier
-                    .width(120.dp)
-                    .height(180.dp),
+                modifier = Modifier.width(120.dp).height(180.dp),
                 contentScale = ContentScale.Crop
             )
-
             Spacer(modifier = Modifier.width(12.dp))
-
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
+            Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
                 Column {
-                    Text(
-                        text = livro.titulo,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-                    Text(
-                        text = "Autor: ${livro.autor}",
-                        fontSize = 12.sp,
-                        color = Color.DarkGray
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = livro.titulo,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color.Black,
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(
+                            onClick = {
+                                val favs = getFavoritos(context)
+                                if (isFavorito) favs.remove(chave) else favs.add(chave)
+                                salvarFavoritos(context, favs)
+                                isFavorito = !isFavorito
+                            },
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (isFavorito) Icons.Default.Star else Icons.Outlined.StarBorder,
+                                contentDescription = "Favoritar",
+                                tint = if (isFavorito) Color(0xFFFFD700) else Color.Gray
+                            )
+                        }
+                    }
+                    Text(text = "Autor: ${livro.autor}", fontSize = 12.sp, color = Color.DarkGray)
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = livro.descricao,
-                        fontSize = 11.sp,
-                        lineHeight = 14.sp,
-                        color = Color.Black,
-                        maxLines = 6
-                    )
+                    Text(text = livro.descricao, fontSize = 11.sp, lineHeight = 14.sp, color = Color.Black, maxLines = 6)
                 }
-
+                // CORREÇÃO: Botões com weight(1f) para dividir espaço igualmente e nunca quebrar linha
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Button(
                         onClick = {
@@ -221,23 +207,18 @@ fun DistopiaBookCard(livro: LivroDistopia, onBuyClick: () -> Unit) {
                             intent.putExtra("livroDescricao", livro.descricao)
                             context.startActivity(intent)
                         },
-                        modifier = Modifier.padding(top = 9.dp, end = 8.dp),
+                        modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = CardContentPink),
                         shape = RoundedCornerShape(4.dp),
-                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
-                    ) {
-                        Text("Comentários", color = CardHeaderRed, fontSize = 12.sp)
-                    }
-
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
+                    ) { Text("Comentários", color = CardHeaderRed, fontSize = 12.sp, maxLines = 1) }
                     Button(
                         onClick = onBuyClick,
-                        modifier = Modifier.padding(top = 8.dp),
+                        modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = CardHeaderRed),
                         shape = RoundedCornerShape(4.dp),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp)
-                    ) {
-                        Text("Comprar", color = Color.White, fontSize = 12.sp)
-                    }
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
+                    ) { Text("Comprar", color = Color.White, fontSize = 12.sp, maxLines = 1) }
                 }
             }
         }
@@ -247,7 +228,5 @@ fun DistopiaBookCard(livro: LivroDistopia, onBuyClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ListaLivrosDistopiaPreview() {
-    MyApplicationTheme {
-        ListaLivrosDistopiaScreen()
-    }
+    MyApplicationTheme { ListaLivrosDistopiaScreen() }
 }
