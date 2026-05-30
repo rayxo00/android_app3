@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,7 +37,13 @@ class ListaLivrosFiccaoCientificaActivity : ComponentActivity() {
     }
 }
 
-data class LivroFiccaoCientifica(val titulo: String, val autor: String, val descricao: String, val imagemRes: Int, val linkCompra: String)
+data class LivroFiccaoCientifica(
+    val titulo: String,
+    val autor: String,
+    val descricao: String,
+    val imagemRes: Int,
+    val linkCompra: String
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,22 +52,71 @@ fun ListaLivrosFiccaoCientificaScreen() {
     var menuExpanded by remember { mutableStateOf(false) }
 
     val livros = listOf(
-        LivroFiccaoCientifica("Duna", "Frank Herbert", "A vida do jovem Paul Atreides está prestes a mudar radicalmente. Após a visita de uma mulher misteriosa, ele é obrigado a deixar seu planeta natal para sobreviver ao ambiente árido de Arrakis, o Planeta Deserto. Envolvido numa intrincada teia política e religiosa, Paul divide-se entre as obrigações de herdeiro e seu treinamento nas doutrinas secretas de uma antiga irmandade.", R.drawable.duna, "https://www.amazon.com.br/Duna-Frank-Herbert/dp/857657313X"),
-        LivroFiccaoCientifica("2001: Uma Odisséia no Espaço", "Arthur C. Clarke", "Nos primórdios da humanidade, um objeto inusitado chega à Terra e influencia os homens a descobrir coisas que permitem sua própria evolução. Milhões de anos depois, a descoberta de um monólito soterrado na Lua leva a Terra a enviar uma equipe ao espaço com HAL 9000, uma inteligência artificial que começa a apresentar falhas suspeitas.", R.drawable.odisseia_no_espaco, "https://www.amazon.com.br/2001-Uma-odiss%C3%A9ia-no-espa%C3%A7o/dp/8576571552"),
-        LivroFiccaoCientifica("Eu, Robô", "Isaac Asimov", "Uma coleção de contos interligados que explora a evolução da robótica e as complexidades éticas da inteligência artificial através das histórias da robopsicóloga Susan Calvin. Centradas nas famosas Três Leis da Robótica, as histórias mostram como essas leis regem o comportamento dos robôs e as interações entre robôs e humanos.", R.drawable.robo, "https://www.amazon.com.br/Eu-Robo-Isaac-Asimov/dp/8576572001")
+        LivroFiccaoCientifica(
+            "Duna", "Frank Herbert",
+            "A vida do jovem Paul Atreides está prestes a mudar radicalmente. Após a visita de uma mulher misteriosa, ele é obrigado a deixar seu planeta natal para sobreviver ao ambiente árido de Arrakis, o Planeta Deserto. Envolvido numa intrincada teia política e religiosa, Paul divide-se entre as obrigações de herdeiro e seu treinamento nas doutrinas secretas de uma antiga irmandade.",
+            R.drawable.duna,
+            "[amazon.com.br](https://www.amazon.com.br/Duna-Frank-Herbert/dp/857657313X)"
+        ),
+        LivroFiccaoCientifica(
+            "2001: Uma Odisséia no Espaço", "Arthur C. Clarke",
+            "Nos primórdios da humanidade, um objeto inusitado chega à Terra e influencia os homens a descobrir coisas que permitem sua própria evolução. Milhões de anos depois, a descoberta de um monólito soterrado na Lua leva a Terra a enviar uma equipe ao espaço com HAL 9000, uma inteligência artificial que começa a apresentar falhas suspeitas.",
+            R.drawable.odisseia_no_espaco,
+            "[amazon.com.br](https://www.amazon.com.br/2001-Uma-odiss%C3%A9ia-no-espa%C3%A7o/dp/8576571552)"
+        ),
+        LivroFiccaoCientifica(
+            "Eu, Robô", "Isaac Asimov",
+            "Uma coleção de contos interligados que explora a evolução da robótica e as complexidades éticas da inteligência artificial através das histórias da robopsicóloga Susan Calvin. Centradas nas famosas Três Leis da Robótica, as histórias mostram como essas leis regem o comportamento dos robôs e as interações entre robôs e humanos.",
+            R.drawable.robo,
+            "[amazon.com.br](https://www.amazon.com.br/Eu-Robo-Isaac-Asimov/dp/8576572001)"
+        )
     )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Livros de Ficção Científica", fontSize = 18.sp, color = CardHeaderRed, fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        "Livros de Ficção Científica",
+                        fontSize = 18.sp,
+                        color = CardHeaderRed,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.SansSerif
+                    )
+                },
                 actions = {
                     Box {
-                        IconButton(onClick = { menuExpanded = true }) { Icon(Icons.Default.Menu, contentDescription = "Menu", tint = CardHeaderRed) }
-                        DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
-                            DropdownMenuItem(text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = TextRed) }, onClick = { menuExpanded = false; val i = Intent(context, MainActivity::class.java); i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP; context.startActivity(i) })
-                            DropdownMenuItem(text = { Text("Favoritos", fontWeight = FontWeight.Bold, color = TextRed) }, onClick = { menuExpanded = false; context.startActivity(Intent(context, FavoritosActivity::class.java)) })
-                            DropdownMenuItem(text = { Text("Suporte", fontWeight = FontWeight.Bold, color = TextRed) }, onClick = { menuExpanded = false; context.startActivity(Intent(context, SuporteActivity::class.java)) })
+                        IconButton(onClick = { menuExpanded = true }) {
+                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = CardHeaderRed)
+                        }
+                        DropdownMenu(
+                            expanded = menuExpanded,
+                            onDismissRequest = { menuExpanded = false },
+                            containerColor = CardHeaderRed
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
+                                onClick = {
+                                    menuExpanded = false
+                                    val i = Intent(context, MainActivity::class.java)
+                                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                    context.startActivity(i)
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Favoritos", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
+                                onClick = {
+                                    menuExpanded = false
+                                    context.startActivity(Intent(context, FavoritosActivity::class.java))
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Suporte", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
+                                onClick = {
+                                    menuExpanded = false
+                                    context.startActivity(Intent(context, SuporteActivity::class.java))
+                                }
+                            )
                         }
                     }
                 },
@@ -69,8 +124,20 @@ fun ListaLivrosFiccaoCientificaScreen() {
             )
         }
     ) { paddingValues ->
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(paddingValues).background(BackgroundCoral).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            items(livros) { livro -> FiccaoCientificaBookCard(livro) { if (livro.linkCompra.isNotEmpty()) context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(livro.linkCompra))) } }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(BackgroundCoral)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(livros) { livro ->
+                FiccaoCientificaBookCard(livro) {
+                    if (livro.linkCompra.isNotEmpty())
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(livro.linkCompra)))
+                }
+            }
         }
     }
 }
@@ -81,43 +148,82 @@ fun FiccaoCientificaBookCard(livro: LivroFiccaoCientifica, onBuyClick: () -> Uni
     val chave = montarChaveFavorito(livro.titulo, livro.autor, livro.imagemRes, "Ficção Científica")
     var isFavorito by remember { mutableStateOf(getFavoritos(context).contains(chave)) }
 
-    Card(modifier = Modifier.fillMaxWidth().clickable { val i = Intent(context, ComentariosActivity::class.java); i.putExtra("livroTitulo", livro.titulo); i.putExtra("categoria", "Ficção Científica"); i.putExtra("livroImagem", livro.imagemRes); i.putExtra("livroDescricao", livro.descricao); context.startActivity(i) }, shape = RoundedCornerShape(4.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
-        Row(modifier = Modifier.padding(12.dp).height(intrinsicSize = IntrinsicSize.Min)) {
-            Image(painter = painterResource(id = livro.imagemRes), contentDescription = livro.titulo, modifier = Modifier.width(120.dp).height(180.dp), contentScale = ContentScale.Crop)
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+                .height(intrinsicSize = IntrinsicSize.Min)
+        ) {
+            Image(
+                painter = painterResource(id = livro.imagemRes),
+                contentDescription = livro.titulo,
+                modifier = Modifier.width(120.dp).height(180.dp),
+                contentScale = ContentScale.Crop
+            )
             Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
                 Column {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(livro.titulo, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black, modifier = Modifier.weight(1f))
-                        IconButton(onClick = { val favs = getFavoritos(context); if (isFavorito) favs.remove(chave) else favs.add(chave); salvarFavoritos(context, favs); isFavorito = !isFavorito }, modifier = Modifier.size(32.dp)) {
-                            Icon(if (isFavorito) Icons.Default.Star else Icons.Outlined.StarBorder, contentDescription = "Favoritar", tint = if (isFavorito) Color(0xFFFFD700) else Color.Gray)
+                        Text(
+                            livro.titulo,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif,
+                            fontSize = 16.sp,
+                            color = Color.Black,
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(
+                            onClick = {
+                                val favs = getFavoritos(context)
+                                if (isFavorito) favs.remove(chave) else favs.add(chave)
+                                salvarFavoritos(context, favs)
+                                isFavorito = !isFavorito
+                            },
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Icon(
+                                if (isFavorito) Icons.Default.Star else Icons.Outlined.StarBorder,
+                                contentDescription = "Favoritar",
+                                tint = if (isFavorito) Color(0xFFFFD700) else Color.Gray
+                            )
                         }
                     }
-                    Text("Autor: ${livro.autor}", fontSize = 12.sp, color = Color.DarkGray)
+                    Text("Autor: ${livro.autor}", fontSize = 12.sp, fontFamily = FontFamily.SansSerif, color = Color.DarkGray)
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(livro.descricao, fontSize = 11.sp, lineHeight = 14.sp, color = Color.Black, maxLines = 6)
+                    Text(livro.descricao, fontSize = 11.sp, fontFamily = FontFamily.SansSerif, lineHeight = 14.sp, color = Color.Black, maxLines = 6)
                 }
-                // CORREÇÃO: Botões com weight(1f) para dividir espaço igualmente e nunca quebrar linha
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Button(
-                        onClick = { val i = Intent(context, ComentariosActivity::class.java); i.putExtra("livroTitulo", livro.titulo); i.putExtra("categoria", "Ficção Científica"); i.putExtra("livroImagem", livro.imagemRes); i.putExtra("livroDescricao", livro.descricao); context.startActivity(i) },
+                        onClick = {
+                            val i = Intent(context, ComentariosActivity::class.java)
+                            i.putExtra("livroTitulo", livro.titulo)
+                            i.putExtra("categoria", "Ficção Científica")
+                            i.putExtra("livroImagem", livro.imagemRes)
+                            i.putExtra("livroDescricao", livro.descricao)
+                            context.startActivity(i)
+                        },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = CardContentPink),
                         shape = RoundedCornerShape(4.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-                    ) { Text("Comentários", color = CardHeaderRed, fontSize = 12.sp, maxLines = 1) }
+                    ) { Text("Comentários", color = CardHeaderRed, fontSize = 12.sp, maxLines = 1, fontFamily = FontFamily.SansSerif) }
                     Button(
                         onClick = onBuyClick,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = CardHeaderRed),
                         shape = RoundedCornerShape(4.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-                    ) { Text("Comprar", color = Color.White, fontSize = 12.sp, maxLines = 1) }
+                    ) { Text("Comprar", color = Color.White, fontSize = 12.sp, maxLines = 1, fontFamily = FontFamily.SansSerif) }
                 }
             }
         }

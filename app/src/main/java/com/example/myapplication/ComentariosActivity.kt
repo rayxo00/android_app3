@@ -21,42 +21,39 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+// Rosa bebê para os títulos e labels
+val BabyPink = Color(0xFFFFB6C1)
+
+// Função para validar e-mail
+fun isEmailValido(email: String): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
 
 class ComentariosActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val libroTitulo =
-            intent.getStringExtra("livroTitulo") ?: "Verity"
-
-        val categoria =
-            intent.getStringExtra("categoria") ?: "Geral"
-
-        val libroImagem =
-            intent.getIntExtra("livroImagem", R.drawable.verity)
-
-        val libroDescricao =
-            intent.getStringExtra("livroDescricao")
-                ?: "Verity Lowen, uma escritora em crise, aceita terminar os livros de uma autora famosa, Verity Crawford. Ao investigar seus manuscritos, descobre um diário perturbador que revela segredos sombrios sobre Verity e sua família - misturando amor, obsessão e suspense psicológico."
+        val libroTitulo = intent.getStringExtra("livroTitulo") ?: "Verity"
+        val categoria = intent.getStringExtra("categoria") ?: "Geral"
+        val libroImagem = intent.getIntExtra("livroImagem", R.drawable.verity)
+        val libroDescricao = intent.getStringExtra("livroDescricao")
+            ?: "Verity Lowen, uma escritora em crise, aceita terminar os livros de uma autora famosa, Verity Crawford."
 
         setContent {
             MyApplicationTheme {
-                ComentariosScreen(
-                    libroTitulo,
-                    categoria,
-                    libroImagem,
-                    libroDescricao
-                )
+                ComentariosScreen(libroTitulo, categoria, libroImagem, libroDescricao)
             }
         }
     }
@@ -73,13 +70,12 @@ fun ComentariosScreen(
 ) {
     val context = LocalContext.current
     val prefKey = "$categoria-$livroTitulo"
-
-    val sharedPreferences =
-        context.getSharedPreferences("comentarios", Context.MODE_PRIVATE)
+    val sharedPreferences = context.getSharedPreferences("comentarios", Context.MODE_PRIVATE)
 
     var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var comentario by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf(false) }
 
     var comentarios by remember {
         mutableStateOf(
@@ -87,23 +83,25 @@ fun ComentariosScreen(
         )
     }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     Scaffold(
         modifier = modifier,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         "Comentários - $livroTitulo ($categoria)",
                         color = CardHeaderRed,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 14.sp
                     )
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            (context as? ComponentActivity)?.finish()
-                        }
-                    ) {
+                    IconButton(onClick = { (context as? ComponentActivity)?.finish() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Voltar",
@@ -111,9 +109,7 @@ fun ComentariosScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = CardContentPink
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = CardContentPink)
             )
         }
     ) { paddingValues ->
@@ -141,40 +137,36 @@ fun ComentariosScreen(
                             .clip(RoundedCornerShape(6.dp)),
                         contentScale = ContentScale.Crop
                     )
-
                     Spacer(modifier = Modifier.width(16.dp))
-
                     Column {
                         Text(
                             text = "Publicado por Dreamy Pages - 05/11/2023",
                             color = CardHeaderRed,
                             fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif,
                             fontSize = 12.sp
                         )
-
                         Spacer(modifier = Modifier.height(8.dp))
-
                         Text(
-                            text = "Bem-vindos à página de comentários e discussões do livro $livroTitulo. Aqui você pode ler opiniões de exemplo, comentar e compartilhar suas impressões.",
+                            text = "Bem-vindos à página de comentários e discussões do livro $livroTitulo.",
                             color = Color.DarkGray,
+                            fontFamily = FontFamily.SansSerif,
                             fontSize = 11.sp,
                             lineHeight = 14.sp
                         )
-
                         Spacer(modifier = Modifier.height(8.dp))
-
                         Text(
                             text = "Resumo rápido",
                             color = CardHeaderRed,
                             fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif,
                             fontSize = 12.sp
                         )
-
                         Spacer(modifier = Modifier.height(4.dp))
-
                         Text(
                             text = livroDescricao,
                             color = Color.DarkGray,
+                            fontFamily = FontFamily.SansSerif,
                             fontSize = 11.sp,
                             lineHeight = 14.sp
                         )
@@ -186,9 +178,10 @@ fun ComentariosScreen(
 
             Text(
                 text = "Comentários",
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = CardHeaderRed
+                fontFamily = FontFamily.SansSerif,
+                color = BabyPink
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -197,46 +190,40 @@ fun ComentariosScreen(
                 Text(
                     text = "Nenhum comentário ainda. Seja o primeiro a comentar!",
                     color = Color.Black,
+                    fontFamily = FontFamily.SansSerif,
                     fontSize = 13.sp,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
 
-            // Formato salvo: "nome|||dd/MM/yyyy HH:mm|||texto"
             comentarios.forEach { comentarioItem ->
                 val partes = comentarioItem.split("|||")
-
                 val nomeAutor: String
                 val dataComentario: String
                 val textoComentario: String
 
                 if (partes.size == 3) {
-                    // Formato novo
                     nomeAutor = partes[0]
                     dataComentario = partes[1]
                     textoComentario = partes[2]
                 } else {
-                    // Formato antigo (compatibilidade)
                     val partesAntigo = comentarioItem.split(":\n\"", limit = 2)
                     nomeAutor = partesAntigo.getOrNull(0) ?: "Usuário"
                     dataComentario = ""
                     textoComentario = partesAntigo.getOrNull(1)?.removeSuffix("\"") ?: comentarioItem
                 }
 
-                CommentItem(
-                    nome = nomeAutor,
-                    data = dataComentario,
-                    texto = textoComentario
-                )
+                CommentItem(nome = nomeAutor, data = dataComentario, texto = textoComentario)
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
                 text = "Enviar um comentário",
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = CardHeaderRed
+                fontFamily = FontFamily.SansSerif,
+                color = BabyPink
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -250,20 +237,66 @@ fun ComentariosScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            CommentInputField(
-                label = "E-mail",
-                value = email,
-                onValueChange = { email = it },
-                placeholder = "seu@gmail.com"
-            )
+            // Campo de e-mail com validação
+            Column {
+                Text(
+                    text = "E-mail",
+                    color = BabyPink,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = {
+                        email = it
+                        emailError = false
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = {
+                        Text(
+                            "seu@gmail.com",
+                            fontSize = 13.sp,
+                            color = Color(0xFF555555),
+                            fontFamily = FontFamily.SansSerif
+                        )
+                    },
+                    singleLine = true,
+                    isError = emailError,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = CardHeaderRed,
+                        unfocusedBorderColor = Color.Black,
+                        errorBorderColor = Color.Red,
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        errorContainerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        errorTextColor = Color.Black
+                    ),
+                    supportingText = {
+                        if (emailError) {
+                            Text(
+                                text = "Por favor, insira um e-mail válido (ex: seu@email.com)",
+                                color = Color.Red,
+                                fontSize = 12.sp,
+                                fontFamily = FontFamily.SansSerif
+                            )
+                        }
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
                 text = "Comentário",
-                color = CardHeaderRed,
+                color = BabyPink,
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
 
@@ -273,13 +306,22 @@ fun ComentariosScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp),
-                placeholder = { Text("Escreva seu comentário aqui...", fontSize = 13.sp) },
+                placeholder = {
+                    Text(
+                        "Escreva seu comentário aqui...",
+                        fontSize = 13.sp,
+                        color = Color(0xFF555555),
+                        fontFamily = FontFamily.SansSerif
+                    )
+                },
                 shape = RoundedCornerShape(8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = CardHeaderRed,
                     unfocusedBorderColor = Color.Gray,
                     focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White
+                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black
                 )
             )
 
@@ -287,24 +329,38 @@ fun ComentariosScreen(
 
             Button(
                 onClick = {
-                    if (nome.isNotBlank() && comentario.isNotBlank()) {
-                        // Data e horário no momento do envio: "dd/MM/yyyy HH:mm"
-                        val dataAtual = SimpleDateFormat(
-                            "dd/MM/yyyy HH:mm",
-                            Locale("pt", "BR")
-                        ).format(Date())
-
-                        // Formato limpo com separador ||| sem ambiguidade
-                        val comentarioCompleto = "$nome|||$dataAtual|||$comentario"
-                        val novaLista = comentarios.toMutableList()
-                        novaLista.add(comentarioCompleto)
-                        comentarios = novaLista
-                        sharedPreferences.edit()
-                            .putStringSet(prefKey, novaLista.toSet())
-                            .apply()
-                        nome = ""
-                        email = ""
-                        comentario = ""
+                    when {
+                        nome.isBlank() -> scope.launch {
+                            snackbarHostState.showSnackbar("Por favor, preencha seu nome.")
+                        }
+                        email.isBlank() -> scope.launch {
+                            snackbarHostState.showSnackbar("Por favor, preencha seu e-mail.")
+                        }
+                        !isEmailValido(email) -> {
+                            emailError = true
+                        }
+                        comentario.isBlank() -> scope.launch {
+                            snackbarHostState.showSnackbar("Por favor, escreva seu comentário.")
+                        }
+                        else -> {
+                            val dataAtual = SimpleDateFormat(
+                                "dd/MM/yyyy HH:mm", Locale("pt", "BR")
+                            ).format(Date())
+                            val comentarioCompleto = "$nome|||$dataAtual|||$comentario"
+                            val novaLista = comentarios.toMutableList()
+                            novaLista.add(comentarioCompleto)
+                            comentarios = novaLista
+                            sharedPreferences.edit()
+                                .putStringSet(prefKey, novaLista.toSet())
+                                .apply()
+                            nome = ""
+                            email = ""
+                            comentario = ""
+                            emailError = false
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Comentário enviado com sucesso!")
+                            }
+                        }
                     }
                 },
                 modifier = Modifier.align(Alignment.End),
@@ -314,7 +370,8 @@ fun ComentariosScreen(
                 Text(
                     "Enviar comentário",
                     color = Color.White,
-                    fontSize = 13.sp
+                    fontSize = 13.sp,
+                    fontFamily = FontFamily.SansSerif
                 )
             }
 
@@ -340,12 +397,14 @@ fun CommentItem(nome: String, data: String, texto: String) {
                 text = nome,
                 color = CardHeaderRed,
                 fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.SansSerif,
                 fontSize = 13.sp
             )
             if (data.isNotBlank()) {
                 Text(
-                    text = data,  // Exibe "dd/MM/yyyy HH:mm"
+                    text = data,
                     color = Color.Gray,
+                    fontFamily = FontFamily.SansSerif,
                     fontSize = 11.sp
                 )
             }
@@ -353,6 +412,7 @@ fun CommentItem(nome: String, data: String, texto: String) {
             Text(
                 text = "\"$texto\"",
                 color = Color.Black,
+                fontFamily = FontFamily.SansSerif,
                 fontSize = 13.sp,
                 lineHeight = 16.sp
             )
@@ -370,23 +430,33 @@ fun CommentInputField(
     Column {
         Text(
             text = label,
-            color = CardHeaderRed,
+            color = BabyPink,
             fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
+            fontFamily = FontFamily.SansSerif,
+            fontSize = 16.sp,
             modifier = Modifier.padding(bottom = 4.dp)
         )
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(placeholder, fontSize = 13.sp) },
+            placeholder = {
+                Text(
+                    placeholder,
+                    fontSize = 13.sp,
+                    color = Color(0xFF555555),
+                    fontFamily = FontFamily.SansSerif
+                )
+            },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = CardHeaderRed,
                 unfocusedBorderColor = Color.Black,
                 focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
+                unfocusedContainerColor = Color.White,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black
             )
         )
     }
@@ -400,7 +470,7 @@ fun ComentariosScreenPreview() {
             livroTitulo = "Verity",
             categoria = "Suspense",
             livroImagem = R.drawable.verity,
-            livroDescricao = "Verity Lowen, uma escritora em crise, aceita terminar os livros de uma autora famosa, Verity Crawford. Ao investigar seus manuscritos, descobre um diário perturbador que revela segredos sombrios sobre Verity e sua família - misturando amor, obsessão e suspense psicológico."
+            livroDescricao = "Verity Lowen, uma escritora em crise..."
         )
     }
 }

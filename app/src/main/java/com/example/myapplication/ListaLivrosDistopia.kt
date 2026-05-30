@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,34 +60,46 @@ fun ListaLivrosDistopiaScreen() {
             "Jogos Vorazes", "Suzanne Collins",
             "Em um futuro pós-apocalíptico, a nação de Panem é dividida em 12 distritos governados com mão de ferro pela Capital. Como punição por uma revolta passada, cada distrito deve enviar dois jovens para participar dos Jogos Vorazes, um reality show mortal onde apenas um sobrevive.",
             R.drawable.jogos_vorazes,
-            "https://www.amazon.com.br/Jogos-Vorazes-Suzanne-Collins/dp/8579800242"
+            "[amazon.com.br](https://www.amazon.com.br/Jogos-Vorazes-Suzanne-Collins/dp/8579800242)"
         ),
         LivroDistopia(
             "Estilhaça-me", "Tahereh Mafi",
             "Juliette Ferrars não toca em ninguém há 264 dias. Seu toque é fatal. O Restabelecimento a mantém presa, vendo-a como uma arma em potencial. No entanto, em um mundo em ruínas, Juliette descobre que seu poder pode ser a única esperança para a resistência.",
             R.drawable.estilhaca_me,
-            "https://www.amazon.com.br/Estilha%C3%A7a-me-Tahereh-Mafi/dp/8531210870"
+            "[amazon.com.br](https://www.amazon.com.br/Estilha%C3%A7a-me-Tahereh-Mafi/dp/8531210870)"
         ),
         LivroDistopia(
             "Divergente", "Veronica Roth",
             "Em uma Chicago futurista, a sociedade é dividida em cinco facções dedicadas a uma virtude. Aos 16 anos, Beatrice Prior deve escolher sua facção. No entanto, ela descobre que é uma Divergente, alguém que não se encaixa em apenas um grupo e que é vista como uma ameaça ao sistema.",
             R.drawable.divergente,
-            "https://www.amazon.com.br/Divergente-Veronica-Roth/dp/8579801311"
+            "[amazon.com.br](https://www.amazon.com.br/Divergente-Veronica-Roth/dp/8579801311)"
         )
     )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Livros de Distopia", fontSize = 18.sp, color = CardHeaderRed, fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        "Livros de Distopia",
+                        fontSize = 18.sp,
+                        color = CardHeaderRed,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.SansSerif
+                    )
+                },
                 actions = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
                             Icon(Icons.Default.Menu, contentDescription = "Menu", tint = CardHeaderRed)
                         }
-                        DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
+                        DropdownMenu(
+                            expanded = menuExpanded,
+                            onDismissRequest = { menuExpanded = false },
+                            containerColor = CardHeaderRed
+                        ) {
                             DropdownMenuItem(
-                                text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = TextRed) },
+                                text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
                                 onClick = {
                                     menuExpanded = false
                                     val intent = Intent(context, MainActivity::class.java)
@@ -96,14 +108,14 @@ fun ListaLivrosDistopiaScreen() {
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("Favoritos", fontWeight = FontWeight.Bold, color = TextRed) },
+                                text = { Text("Favoritos", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
                                 onClick = {
                                     menuExpanded = false
                                     context.startActivity(Intent(context, FavoritosActivity::class.java))
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("Suporte", fontWeight = FontWeight.Bold, color = TextRed) },
+                                text = { Text("Suporte", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
                                 onClick = {
                                     menuExpanded = false
                                     context.startActivity(Intent(context, SuporteActivity::class.java))
@@ -142,31 +154,34 @@ fun DistopiaBookCard(livro: LivroDistopia, onBuyClick: () -> Unit) {
     var isFavorito by remember { mutableStateOf(getFavoritos(context).contains(chave)) }
 
     Card(
-        modifier = Modifier.fillMaxWidth().clickable {
-            val intent = Intent(context, ComentariosActivity::class.java)
-            intent.putExtra("livroTitulo", livro.titulo)
-            intent.putExtra("categoria", "Distopia")
-            intent.putExtra("livroImagem", livro.imagemRes)
-            intent.putExtra("livroDescricao", livro.descricao)
-            context.startActivity(intent)
-        },
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Row(modifier = Modifier.padding(12.dp).height(intrinsicSize = IntrinsicSize.Min)) {
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+                .height(intrinsicSize = IntrinsicSize.Min)
+        ) {
             Image(
                 painter = painterResource(id = livro.imagemRes),
                 contentDescription = livro.titulo,
-                modifier = Modifier.width(120.dp).height(180.dp),
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(180.dp),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
                 Column {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = livro.titulo,
                             fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif,
                             fontSize = 16.sp,
                             color = Color.Black,
                             modifier = Modifier.weight(1f)
@@ -187,11 +202,22 @@ fun DistopiaBookCard(livro: LivroDistopia, onBuyClick: () -> Unit) {
                             )
                         }
                     }
-                    Text(text = "Autor: ${livro.autor}", fontSize = 12.sp, color = Color.DarkGray)
+                    Text(
+                        text = "Autor: ${livro.autor}",
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        color = Color.DarkGray
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = livro.descricao, fontSize = 11.sp, lineHeight = 14.sp, color = Color.Black, maxLines = 6)
+                    Text(
+                        text = livro.descricao,
+                        fontSize = 11.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        lineHeight = 14.sp,
+                        color = Color.Black,
+                        maxLines = 6
+                    )
                 }
-                // CORREÇÃO: Botões com weight(1f) para dividir espaço igualmente e nunca quebrar linha
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -211,14 +237,18 @@ fun DistopiaBookCard(livro: LivroDistopia, onBuyClick: () -> Unit) {
                         colors = ButtonDefaults.buttonColors(containerColor = CardContentPink),
                         shape = RoundedCornerShape(4.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-                    ) { Text("Comentários", color = CardHeaderRed, fontSize = 12.sp, maxLines = 1) }
+                    ) {
+                        Text("Comentários", color = CardHeaderRed, fontSize = 12.sp, maxLines = 1, fontFamily = FontFamily.SansSerif)
+                    }
                     Button(
                         onClick = onBuyClick,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = CardHeaderRed),
                         shape = RoundedCornerShape(4.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-                    ) { Text("Comprar", color = Color.White, fontSize = 12.sp, maxLines = 1) }
+                    ) {
+                        Text("Comprar", color = Color.White, fontSize = 12.sp, maxLines = 1, fontFamily = FontFamily.SansSerif)
+                    }
                 }
             }
         }

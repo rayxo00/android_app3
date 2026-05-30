@@ -46,7 +46,7 @@ fun DreamyPagesScreen(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(BackgroundCoral)
-            .statusBarsPadding()  // <-- Recua abaixo da status bar
+            .statusBarsPadding()
     ) {
         DreamyPagesTopBar()
         Column(
@@ -101,14 +101,15 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
 
                 DropdownMenu(
                     expanded = menuExpanded,
-                    onDismissRequest = { menuExpanded = false }
+                    onDismissRequest = { menuExpanded = false },
+                    containerColor = CardHeaderRed
                 ) {
                     DropdownMenuItem(
                         text = {
                             Text(
                                 "Favoritos",
                                 fontWeight = FontWeight.Bold,
-                                color = TextRed
+                                color = Color.White
                             )
                         },
                         onClick = {
@@ -122,7 +123,7 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
                             Text(
                                 "Suporte",
                                 fontWeight = FontWeight.Bold,
-                                color = TextRed
+                                color = Color.White
                             )
                         },
                         onClick = {

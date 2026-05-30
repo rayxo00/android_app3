@@ -7,6 +7,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,7 +20,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,12 +32,13 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.ui.draw.clip
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.platform.LocalContext
 
 class FavoritosActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
                 FavoritosScreen()
@@ -47,11 +51,9 @@ val RedPrimary = Color(0xFFE57373)
 val RedDark = Color(0xFF8B0000)
 val OffWhite = Color(0xFFFFF5F5)
 
-// Chave global de favoritos
 const val PREF_FAVORITOS = "favoritos_global"
 const val KEY_FAVORITOS = "lista_favoritos"
 
-// Funções utilitárias usadas por todos os arquivos
 fun getFavoritos(context: Context): MutableSet<String> {
     val prefs = context.getSharedPreferences(PREF_FAVORITOS, Context.MODE_PRIVATE)
     return prefs.getStringSet(KEY_FAVORITOS, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
@@ -103,45 +105,98 @@ fun FavoritosScreen() {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Favoritos", color = RedDark, fontSize = 20.sp, fontWeight = FontWeight.Bold) },
+                modifier = Modifier.height(70.dp),
+                title = {
+                    Box(
+                        modifier = Modifier.fillMaxHeight(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "Favoritos",
+                            color = RedDark,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif
+                        )
+                    }
+                },
                 navigationIcon = {
-                    Icon(
-                        Icons.Default.Star,
-                        contentDescription = null,
-                        tint = Color(0xFFFFD700),
-                        modifier = Modifier.padding(8.dp)
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxHeight(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.Star,
+                            contentDescription = null,
+                            tint = Color(0xFFFFD700),
+                            modifier = Modifier
+                                .padding(start = 12.dp)
+                                .size(30.dp)
+                        )
+                    }
                 },
                 actions = {
-                    Box {
-                        IconButton(onClick = { menuExpanded = true }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = RedDark)
-                        }
-                        DropdownMenu(
-                            expanded = menuExpanded,
-                            onDismissRequest = { menuExpanded = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = RedDark) },
-                                onClick = {
-                                    menuExpanded = false
-                                    val intent = Intent(context, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                    context.startActivity(intent)
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Favoritos", fontWeight = FontWeight.Bold, color = RedDark) },
-                                onClick = { menuExpanded = false }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Suporte", fontWeight = FontWeight.Bold, color = RedDark) },
-                                onClick = {
-                                    menuExpanded = false
-                                    val intent = Intent(context, SuporteActivity::class.java)
-                                    context.startActivity(intent)
-                                }
-                            )
+                    Box(
+                        modifier = Modifier.fillMaxHeight(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Box {
+                            IconButton(onClick = { menuExpanded = true }) {
+                                Icon(
+                                    Icons.Default.Menu,
+                                    contentDescription = "Menu",
+                                    tint = RedDark,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
+                            DropdownMenu(
+                                expanded = menuExpanded,
+                                onDismissRequest = { menuExpanded = false },
+                                containerColor = RedDark
+                            ) {
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            "Página Inicial",
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White,
+                                            fontFamily = FontFamily.SansSerif
+                                        )
+                                    },
+                                    onClick = {
+                                        menuExpanded = false
+                                        val intent = Intent(context, MainActivity::class.java)
+                                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                        context.startActivity(intent)
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            "Favoritos",
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White,
+                                            fontFamily = FontFamily.SansSerif
+                                        )
+                                    },
+                                    onClick = { menuExpanded = false }
+                                )
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            "Suporte",
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White,
+                                            fontFamily = FontFamily.SansSerif
+                                        )
+                                    },
+                                    onClick = {
+                                        menuExpanded = false
+                                        val intent = Intent(context, SuporteActivity::class.java)
+                                        context.startActivity(intent)
+                                    }
+                                )
+                            }
                         }
                     }
                 },
@@ -149,13 +204,19 @@ fun FavoritosScreen() {
             )
         },
         bottomBar = {
-            Surface(modifier = Modifier.fillMaxWidth(), color = RedDark) {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
                 Text(
-                    text = "© 2026 Dreamy Pages - Seu refúgio literário",
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     fontSize = 10.sp,
-                    modifier = Modifier.padding(8.dp)
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
                 )
             }
         }
@@ -165,7 +226,7 @@ fun FavoritosScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(RedPrimary)
-                .padding(16.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -173,12 +234,14 @@ fun FavoritosScreen() {
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.SansSerif,
                 textAlign = TextAlign.Center
             )
             Text(
                 text = "Toque na estrela em qualquer livro para salvar aqui!",
                 color = Color.White,
                 fontSize = 12.sp,
+                fontFamily = FontFamily.SansSerif,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
@@ -197,6 +260,7 @@ fun FavoritosScreen() {
                         color = RedDark,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.SansSerif,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp),
@@ -216,6 +280,7 @@ fun FavoritosScreen() {
                                 text = "Nenhum favorito ainda.\nToque na ⭐ em qualquer livro para adicionar!",
                                 color = RedDark,
                                 fontSize = 13.sp,
+                                fontFamily = FontFamily.SansSerif,
                                 textAlign = TextAlign.Center,
                                 lineHeight = 20.sp
                             )
@@ -229,11 +294,20 @@ fun FavoritosScreen() {
                                 FavoritoCard(
                                     livro = livro,
                                     onRemover = {
-                                        val chave = montarChaveFavorito(livro.titulo, livro.autor, livro.imagemRes, livro.categoria)
+                                        val chave = montarChaveFavorito(
+                                            livro.titulo, livro.autor, livro.imagemRes, livro.categoria
+                                        )
                                         val novo = getFavoritos(context)
                                         novo.remove(chave)
                                         salvarFavoritos(context, novo)
                                         favoritosRaw = novo
+                                    },
+                                    onImageClick = {
+                                        val intent = Intent(context, ComentariosActivity::class.java)
+                                        intent.putExtra("livroTitulo", livro.titulo)
+                                        intent.putExtra("categoria", livro.categoria)
+                                        intent.putExtra("livroImagem", livro.imagemRes)
+                                        context.startActivity(intent)
                                     }
                                 )
                             }
@@ -246,7 +320,7 @@ fun FavoritosScreen() {
 }
 
 @Composable
-fun FavoritoCard(livro: LivroFavorito, onRemover: () -> Unit) {
+fun FavoritoCard(livro: LivroFavorito, onRemover: () -> Unit, onImageClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -264,7 +338,8 @@ fun FavoritoCard(livro: LivroFavorito, onRemover: () -> Unit) {
                 modifier = Modifier
                     .width(60.dp)
                     .height(90.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable { onImageClick() },
                 contentScale = ContentScale.Crop
             )
 
@@ -275,16 +350,19 @@ fun FavoritoCard(livro: LivroFavorito, onRemover: () -> Unit) {
                     text = livro.titulo,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif,
                     color = RedDark
                 )
                 Text(
                     text = livro.autor,
                     fontSize = 11.sp,
+                    fontFamily = FontFamily.SansSerif,
                     color = Color.Gray
                 )
                 Text(
                     text = livro.categoria,
                     fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
                     color = RedPrimary,
                     fontWeight = FontWeight.Bold
                 )
