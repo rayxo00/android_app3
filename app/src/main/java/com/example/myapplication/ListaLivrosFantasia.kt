@@ -78,7 +78,7 @@ fun ListaLivrosFantasiaScreen() {
                 title = {
                     Text(
                         "Livros de Fantasia",
-                        fontSize = 18.sp,
+                        fontSize = 19.sp,
                         color = CardHeaderRed,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif

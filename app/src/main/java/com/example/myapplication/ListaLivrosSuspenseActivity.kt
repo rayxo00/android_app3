@@ -78,7 +78,7 @@ fun ListaLivrosSuspenseScreen() {
                 title = {
                     Text(
                         "Livros de Suspense/Mistério",
-                        fontSize = 18.sp,
+                        fontSize = 19.sp,
                         color = CardHeaderRed,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif

@@ -78,7 +78,7 @@ fun ListaLivrosRomanceScreen() {
                 title = {
                     Text(
                         "Livros de Romance",
-                        fontSize = 18.sp,
+                        fontSize = 19.sp,
                         color = CardHeaderRed,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif

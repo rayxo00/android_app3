@@ -232,7 +232,7 @@ fun FavoritosScreen() {
             Text(
                 text = "Meus Livros Favoritos",
                 color = Color.White,
-                fontSize = 24.sp,
+                fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.SansSerif,
                 textAlign = TextAlign.Center

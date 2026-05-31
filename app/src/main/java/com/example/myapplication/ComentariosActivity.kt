@@ -97,7 +97,7 @@ fun ComentariosScreen(
                         color = CardHeaderRed,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif,
-                        fontSize = 14.sp
+                        fontSize = 18.sp
                     )
                 },
                 navigationIcon = {

@@ -78,7 +78,7 @@ fun ListaLivrosTerrorScreen() {
                 title = {
                     Text(
                         "Livros de Terror",
-                        fontSize = 18.sp,
+                        fontSize = 19.sp,
                         color = CardHeaderRed,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif
