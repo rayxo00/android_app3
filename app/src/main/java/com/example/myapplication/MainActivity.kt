@@ -95,7 +95,7 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
                     contentDescription = "Menu",
                     tint = TextRed,
                     modifier = Modifier
-                        .size(44.dp)
+                        .size(43.dp)
                         .clickable { menuExpanded = true }
                 )
 

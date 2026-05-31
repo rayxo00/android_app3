@@ -82,7 +82,7 @@ fun ListaLivrosDistopiaScreen() {
                 title = {
                     Text(
                         "Livros de Distopia",
-                        fontSize = 19.sp,
+                        fontSize = 18.sp,
                         color = CardHeaderRed,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif

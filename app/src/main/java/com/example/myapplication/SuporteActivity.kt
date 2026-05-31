@@ -157,7 +157,7 @@ fun SuporteScreen() {
                 Text(
                     "Central de Suporte",
                     color = Color.White,
-                    fontSize = 21.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Serif
                 )

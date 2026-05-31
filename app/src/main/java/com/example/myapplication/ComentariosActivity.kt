@@ -244,7 +244,7 @@ fun ComentariosScreen(
                     color = BabyPink,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.SansSerif,
-                    fontSize = 16.sp,
+                    fontSize = 17.sp,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 OutlinedTextField(
@@ -296,7 +296,7 @@ fun ComentariosScreen(
                 color = BabyPink,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.SansSerif,
-                fontSize = 16.sp,
+                fontSize = 17.sp,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
 
@@ -433,7 +433,7 @@ fun CommentInputField(
             color = BabyPink,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.SansSerif,
-            fontSize = 16.sp,
+            fontSize = 17.sp,
             modifier = Modifier.padding(bottom = 4.dp)
         )
         OutlinedTextField(
