@@ -205,7 +205,7 @@ fun ComentariosScreen(
             if (comentarios.isEmpty()) {
                 Text(
                     text = "Nenhum comentário ainda. Seja o primeiro a comentar!",
-                    color = Color.Black,
+                    color = Color.White,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 13.sp,
                     modifier = Modifier.padding(vertical = 8.dp)
