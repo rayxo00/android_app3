@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,19 +61,19 @@ fun ListaLivrosDistopiaScreen() {
             "Jogos Vorazes", "Suzanne Collins",
             "Em um futuro pós-apocalíptico, a nação de Panem é dividida em 12 distritos governados com mão de ferro pela Capital. Como punição por uma revolta passada, cada distrito deve enviar dois jovens para participar dos Jogos Vorazes, um reality show mortal onde apenas um sobrevive.",
             R.drawable.jogos_vorazes,
-            "[amazon.com.br](https://www.amazon.com.br/Jogos-Vorazes-Suzanne-Collins/dp/8579800242)"
+            "https://www.amazon.com.br/Jogos-Vorazes-Suzanne-Collins/dp/8579800242"
         ),
         LivroDistopia(
             "Estilhaça-me", "Tahereh Mafi",
             "Juliette Ferrars não toca em ninguém há 264 dias. Seu toque é fatal. O Restabelecimento a mantém presa, vendo-a como uma arma em potencial. No entanto, em um mundo em ruínas, Juliette descobre que seu poder pode ser a única esperança para a resistência.",
             R.drawable.estilhaca_me,
-            "[amazon.com.br](https://www.amazon.com.br/Estilha%C3%A7a-me-Tahereh-Mafi/dp/8531210870)"
+            "https://www.amazon.com.br/s?k=estilhaça+me&i=stripbooks&__mk_pt_BR=ÅMÅŽÕÑ&crid=OG1VYHHE73YC&sprefix=estilhaça+me+%2Cstripbooks%2C4417&ref=nb_sb_noss_2"
         ),
         LivroDistopia(
             "Divergente", "Veronica Roth",
             "Em uma Chicago futurista, a sociedade é dividida em cinco facções dedicadas a uma virtude. Aos 16 anos, Beatrice Prior deve escolher sua facção. No entanto, ela descobre que é uma Divergente, alguém que não se encaixa em apenas um grupo e que é vista como uma ameaça ao sistema.",
             R.drawable.divergente,
-            "[amazon.com.br](https://www.amazon.com.br/Divergente-Veronica-Roth/dp/8579801311)"
+            "https://www.amazon.com.br/Divergente-Veronica-Roth/dp/8579801311"
         )
     )
 
@@ -96,7 +97,7 @@ fun ListaLivrosDistopiaScreen() {
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false },
-                            containerColor = CardHeaderRed
+                            containerColor = RedDark
                         ) {
                             DropdownMenuItem(
                                 text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
@@ -126,13 +127,30 @@ fun ListaLivrosDistopiaScreen() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = CardContentPink)
             )
+        },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
+                Text(
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(BackgroundCoral)
+                .background(RedPrimary)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

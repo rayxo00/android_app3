@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,19 +57,19 @@ fun ListaLivrosRomanceScreen() {
             "A Hipótese do Amor", "Ali Hazelwood",
             "Uma estudante de doutorado, Olive, que finge um namoro com um professor renomado, Adam, para convencer sua melhor amiga de que está feliz no amor. O que começa como uma farsa científica se transforma em um romance real.",
             R.drawable.hipotese,
-            "[amazon.com.br](https://www.amazon.com.br/hip%C3%B3tese-amor-Sucesso-TikTok/dp/6555653302)"
+            "https://www.amazon.com.br/hip%C3%B3tese-amor-Sucesso-TikTok/dp/6555653302"
         ),
         LivroRomance(
             "Amor Teoricamente", "Ali Hazelwood",
             "Elsie Hannaway finge ser namorada de aluguel para complementar a renda. Sua vida 'fake' colide com Jack Smith, um físico experimental e possível obstáculo para o emprego dos seus sonhos no MIT.",
             R.drawable.amor,
-            "[amazon.com.br](https://www.amazon.com.br/Amor-teoricamente-Ali-Hazelwood/dp/6555655259)"
+            "https://www.amazon.com.br/Amor-teoricamente-Ali-Hazelwood/dp/6555655259"
         ),
         LivroRomance(
             "O Acordo", "Elle Kennedy",
             "Hannah Wells não se interessa por Garret Graham, o capitão do time de hóquei. Para não ser expulso, Garret concorda em ajudar Hannah a fazer ciúmes no rapaz por quem ela é apaixonada.",
             R.drawable.acordo,
-            "[amazon.com.br](https://www.amazon.com.br/acordo-Elle-Kennedy/dp/8584390278)"
+            "https://www.amazon.com.br/acordo-Elle-Kennedy/dp/8584390278"
         )
     )
 
@@ -92,7 +93,7 @@ fun ListaLivrosRomanceScreen() {
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false },
-                            containerColor = CardHeaderRed
+                            containerColor = RedDark
                         ) {
                             DropdownMenuItem(
                                 text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
@@ -122,13 +123,30 @@ fun ListaLivrosRomanceScreen() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = CardContentPink)
             )
+        },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
+                Text(
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(BackgroundCoral)
+                .background(RedPrimary)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,19 +57,19 @@ fun ListaLivrosFiccaoCientificaScreen() {
             "Duna", "Frank Herbert",
             "A vida do jovem Paul Atreides está prestes a mudar radicalmente. Após a visita de uma mulher misteriosa, ele é obrigado a deixar seu planeta natal para sobreviver ao ambiente árido de Arrakis, o Planeta Deserto. Envolvido numa intrincada teia política e religiosa, Paul divide-se entre as obrigações de herdeiro e seu treinamento nas doutrinas secretas de uma antiga irmandade.",
             R.drawable.duna,
-            "[amazon.com.br](https://www.amazon.com.br/Duna-Frank-Herbert/dp/857657313X)"
+            "https://www.amazon.com.br/Duna-Frank-Herbert/dp/857657313X"
         ),
         LivroFiccaoCientifica(
             "2001: Uma Odisséia no Espaço", "Arthur C. Clarke",
             "Nos primórdios da humanidade, um objeto inusitado chega à Terra e influencia os homens a descobrir coisas que permitem sua própria evolução. Milhões de anos depois, a descoberta de um monólito soterrado na Lua leva a Terra a enviar uma equipe ao espaço com HAL 9000, uma inteligência artificial que começa a apresentar falhas suspeitas.",
             R.drawable.odisseia_no_espaco,
-            "[amazon.com.br](https://www.amazon.com.br/2001-Uma-odiss%C3%A9ia-no-espa%C3%A7o/dp/8576571552)"
+            "https://www.amazon.com.br/2001-Uma-odiss%C3%A9ia-no-espa%C3%A7o/dp/8576571552"
         ),
         LivroFiccaoCientifica(
             "Eu, Robô", "Isaac Asimov",
             "Uma coleção de contos interligados que explora a evolução da robótica e as complexidades éticas da inteligência artificial através das histórias da robopsicóloga Susan Calvin. Centradas nas famosas Três Leis da Robótica, as histórias mostram como essas leis regem o comportamento dos robôs e as interações entre robôs e humanos.",
             R.drawable.robo,
-            "[amazon.com.br](https://www.amazon.com.br/Eu-Robo-Isaac-Asimov/dp/8576572001)"
+            "https://www.amazon.com.br/Eu-Robo-Isaac-Asimov/dp/8576572001"
         )
     )
 
@@ -92,7 +93,7 @@ fun ListaLivrosFiccaoCientificaScreen() {
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false },
-                            containerColor = CardHeaderRed
+                            containerColor = RedDark
                         ) {
                             DropdownMenuItem(
                                 text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
@@ -122,13 +123,30 @@ fun ListaLivrosFiccaoCientificaScreen() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = CardContentPink)
             )
+        },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
+                Text(
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(BackgroundCoral)
+                .background(RedPrimary)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

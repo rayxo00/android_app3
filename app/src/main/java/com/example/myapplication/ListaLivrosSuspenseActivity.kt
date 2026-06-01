@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,19 +57,19 @@ fun ListaLivrosSuspenseScreen() {
             "Verity", "Colleen Hoover",
             "Descreve a história da escritora Lowen Ashleigh, que é contratada para terminar a série de livros de uma autora de sucesso chamada Verity Crawford, que sofreu um sério acidente.",
             R.drawable.verity,
-            "[amazon.com.br](https://www.amazon.com.br/s?k=verity+colleen+hoover)"
+            "https://www.amazon.com.br/s?k=verity+colleen+hoover"
         ),
         LivroSuspense(
             "Misery", "Stephen King",
             "Paul Sheldon sofre um acidente e é resgatado por Annie Wilkes, sua fã obcecada. Preso e torturado pela perturbada Annie.",
             R.drawable.misery,
-            "[amazon.com.br](https://www.amazon.com.br/s?k=misery+stephen+king)"
+            "https://www.amazon.com.br/s?k=misery+stephen+king"
         ),
         LivroSuspense(
             "E Não Sobrou Nenhum", "Agatha Christie",
             "Dez estranhos são convidados para uma ilha isolada e começam a morrer um a um seguindo a letra de uma cantiga infantil.",
             R.drawable.sobrou,
-            "[amazon.com.br](https://www.amazon.com.br/s?k=e+nao+sobrou+nenhum+agatha+christie)"
+            "https://www.amazon.com.br/s?k=e+nao+sobrou+nenhum+agatha+christie"
         )
     )
 
@@ -92,7 +93,7 @@ fun ListaLivrosSuspenseScreen() {
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false },
-                            containerColor = CardHeaderRed
+                            containerColor = RedDark
                         ) {
                             DropdownMenuItem(
                                 text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
@@ -122,13 +123,30 @@ fun ListaLivrosSuspenseScreen() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = CardContentPink)
             )
+        },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
+                Text(
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(BackgroundCoral)
+                .background(RedPrimary)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

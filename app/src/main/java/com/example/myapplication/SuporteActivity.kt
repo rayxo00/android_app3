@@ -65,6 +65,7 @@ fun SuporteScreen() {
     var email by remember { mutableStateOf("") }
     var assunto by remember { mutableStateOf("") }
     var enviando by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf(false) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -73,7 +74,7 @@ fun SuporteScreen() {
                 title = {
                     Text(
                         "Suporte",
-                        color = TextRed,
+                        color = RedDark,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.Serif
                     )
@@ -83,7 +84,7 @@ fun SuporteScreen() {
                         Icons.Default.Email,
                         contentDescription = null,
                         tint = TextRed,
-                        modifier = Modifier.padding(start = 16.dp)
+                        modifier = Modifier.padding(start = 30.dp)
                     )
                 },
                 actions = {
@@ -93,14 +94,15 @@ fun SuporteScreen() {
                         }
                         DropdownMenu(
                             expanded = menuExpanded,
-                            onDismissRequest = { menuExpanded = false }
+                            onDismissRequest = { menuExpanded = false },
+                            containerColor = RedDark
                         ) {
                             DropdownMenuItem(
                                 text = {
                                     Text(
                                         "Página Inicial",
                                         fontWeight = FontWeight.Bold,
-                                        color = TextRed
+                                        color = Color.White
                                     )
                                 },
                                 onClick = {
@@ -115,7 +117,7 @@ fun SuporteScreen() {
                                     Text(
                                         "Favoritos",
                                         fontWeight = FontWeight.Bold,
-                                        color = TextRed
+                                        color = Color.White
                                     )
                                 },
                                 onClick = {
@@ -129,12 +131,11 @@ fun SuporteScreen() {
                                     Text(
                                         "Suporte",
                                         fontWeight = FontWeight.Bold,
-                                        color = TextRed
+                                        color = Color.White
                                     )
                                 },
                                 onClick = {
                                     menuExpanded = false
-                                    // já está na tela de Suporte, não navega
                                 }
                             )
                         }
@@ -142,13 +143,30 @@ fun SuporteScreen() {
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = CardContentPink)
             )
+        },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
+                Text(
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(BackgroundCoral)
+                .background(RedPrimary)
                 .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -180,13 +198,45 @@ fun SuporteScreen() {
                             placeholder = "Digite seu nome",
                             modifier = Modifier.testTag("nome_field")
                         )
-                        SuporteTextField(
-                            label = "E-mail",
-                            value = email,
-                            onValueChange = { email = it },
-                            placeholder = "seuemail@email.com",
-                            modifier = Modifier.testTag("email_field")
-                        )
+
+                        Column(modifier = Modifier.testTag("email_field")) {
+                            Text(
+                                "E-mail",
+                                color = TextRed,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(bottom = 4.dp)
+                            )
+                            OutlinedTextField(
+                                value = email,
+                                onValueChange = {
+                                    email = it
+                                    emailError = false
+                                },
+                                placeholder = { Text("seuemail@email.com", fontSize = 12.sp) },
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true,
+                                isError = emailError,
+                                supportingText = {
+                                    if (emailError) {
+                                        Text(
+                                            "Por favor, insira um e-mail válido (ex: seu@email.com)",
+                                            color = Color.Red,
+                                            fontSize = 11.sp
+                                        )
+                                    }
+                                },
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = TextRed,
+                                    unfocusedBorderColor = Color.Black,
+                                    errorBorderColor = Color.Red,
+                                    focusedContainerColor = Color.White,
+                                    unfocusedContainerColor = Color.White,
+                                    errorContainerColor = Color.White,
+                                )
+                            )
+                        }
+
                         SuporteTextField(
                             label = "Assunto",
                             value = assunto,
@@ -198,16 +248,35 @@ fun SuporteScreen() {
 
                         Button(
                             onClick = {
-                                if (nome.isNotBlank() && email.isNotBlank() && assunto.isNotBlank()) {
-                                    enviando = true
-                                    scope.launch {
-                                        val sucesso = sendEmail(nome, email, assunto)
-                                        enviando = false
-                                        snackbarHostState.showSnackbar(
-                                            if (sucesso) "Mensagem enviada com sucesso!"
-                                            else "Erro ao enviar mensagem."
-                                        )
-                                        if (sucesso) { nome = ""; email = ""; assunto = "" }
+                                when {
+                                    nome.isBlank() -> scope.launch {
+                                        snackbarHostState.showSnackbar("Por favor, preencha seu nome.")
+                                    }
+                                    email.isBlank() -> scope.launch {
+                                        snackbarHostState.showSnackbar("Por favor, preencha seu e-mail.")
+                                    }
+                                    !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                                        emailError = true
+                                    }
+                                    assunto.isBlank() -> scope.launch {
+                                        snackbarHostState.showSnackbar("Por favor, descreva seu assunto.")
+                                    }
+                                    else -> {
+                                        enviando = true
+                                        scope.launch {
+                                            val sucesso = sendEmail(nome, email, assunto)
+                                            enviando = false
+                                            snackbarHostState.showSnackbar(
+                                                if (sucesso) "Mensagem enviada com sucesso!"
+                                                else "Erro ao enviar mensagem."
+                                            )
+                                            if (sucesso) {
+                                                nome = ""
+                                                email = ""
+                                                assunto = ""
+                                                emailError = false
+                                            }
+                                        }
                                     }
                                 }
                             },
@@ -259,7 +328,9 @@ fun SuporteCard(title: String, content: @Composable () -> Unit) {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp)
             )
             content()
         }
@@ -286,7 +357,7 @@ fun SuporteTextField(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            placeholder = { Text(placeholder, fontSize = 12.sp)  },
+            placeholder = { Text(placeholder, fontSize = 12.sp) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = singleLine,
             minLines = if (singleLine) 1 else 4,

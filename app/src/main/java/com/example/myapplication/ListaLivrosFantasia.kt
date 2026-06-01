@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,19 +57,19 @@ fun ListaLivrosFantasiaScreen() {
             "A Rainha Vermelha", "Victoria Aveyard",
             "O mundo de Mare Barrow é dividido pelo sangue: vermelho ou prateado. Mare é vermelha: plebeia, destinada a servir uma elite prateada com poderes sobrenaturais. Ao conseguir um emprego no palácio real, ela descobre ter um poder misterioso. Em meio às intrigas dos nobres, suas ações desencadearão uma dança violenta e fatal.",
             R.drawable.rainha,
-            "[amazon.com.br](https://www.amazon.com.br/rainha-vermelha-Victoria-Aveyard/dp/8565765695)"
+            "https://www.amazon.com.br/rainha-vermelha-Victoria-Aveyard/dp/8565765695"
         ),
         LivroFantasia(
             "De Sangue e Cinzas", "Jennifer L. Armentrout",
             "Poppy é a Donzela, destinada a ser entregue aos deuses e a salvar o reino de Solis. Privada de todas as escolhas e obrigada a cobrir o rosto com um véu, ela leva uma vida solitária. Com a entrada de Hawke Flynn em sua vida, o mundo de Poppy vira de cabeça para baixo e ela é lançada em uma rede de mentiras, traições e desejo.",
             R.drawable.de_sangue_e_cinzas,
-            "[amazon.com.br](https://www.amazon.com.br/sangue-cinzas-Vol-1/dp/655981002X)"
+            "https://www.amazon.com.br/sangue-cinzas-Vol-1/dp/655981002X"
         ),
         LivroFantasia(
             "O Príncipe Cruel", "Holly Black",
             "Jude tinha apenas sete anos quando seus pais foram assassinados e ela foi levada para viver no Reino das Fadas. Dez anos depois, ela quer se encaixar, mas enfrenta o desprezo dos feéricos, especialmente do príncipe Cardan. Ao se envolver nas intrigas do palácio, Jude descobre sua vocação para trapaças e terá que arriscar tudo para salvar suas irmãs e o reino.",
             R.drawable.principe_cruel,
-            "[amazon.com.br](https://www.amazon.com.br/pr%C3%ADncipe-cruel-Vol-Povo-Ar/dp/850111555X)"
+            "https://www.amazon.com.br/pr%C3%ADncipe-cruel-Vol-Povo-Ar/dp/850111555X"
         )
     )
 
@@ -92,7 +93,7 @@ fun ListaLivrosFantasiaScreen() {
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false },
-                            containerColor = CardHeaderRed
+                            containerColor = RedDark
                         ) {
                             DropdownMenuItem(
                                 text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
@@ -122,6 +123,23 @@ fun ListaLivrosFantasiaScreen() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = CardContentPink)
             )
+        },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
+                Text(
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     ) { paddingValues ->
         LazyColumn(

@@ -45,13 +45,12 @@ fun DreamyPagesScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(BackgroundCoral)
-            .statusBarsPadding()
+            .background(RedPrimary)
     ) {
         DreamyPagesTopBar()
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .weight(1f)
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -59,6 +58,21 @@ fun DreamyPagesScreen(modifier: Modifier = Modifier) {
             SobreNosSection()
             TemasDeLivrosSection()
             Spacer(modifier = Modifier.height(16.dp))
+        }
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = RedDark
+        ) {
+            Text(
+                text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                fontSize = 10.sp,
+                fontFamily = FontFamily.SansSerif,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 10.dp)
+                    .navigationBarsPadding()
+            )
         }
     }
 }
@@ -75,6 +89,7 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .statusBarsPadding()
                 .height(70.dp)
                 .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -102,7 +117,7 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
                 DropdownMenu(
                     expanded = menuExpanded,
                     onDismissRequest = { menuExpanded = false },
-                    containerColor = CardHeaderRed
+                    containerColor = RedDark
                 ) {
                     DropdownMenuItem(
                         text = {

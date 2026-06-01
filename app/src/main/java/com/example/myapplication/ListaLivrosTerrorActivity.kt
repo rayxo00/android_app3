@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,19 +57,19 @@ fun ListaLivrosTerrorScreen() {
             "It - A Coisa", "Stephen King",
             "Um grupo de sete amigos em Derry luta contra uma entidade maligna que se manifesta na forma de seus maiores medos, principalmente o palhaço Pennywise. A história é contada em duas linhas do tempo: a infância em 1958 e a vida adulta em 1985.",
             R.drawable.it,
-            "[amazon.com.br](https://www.amazon.com.br/coisa-livro-origem-s%C3%A9rie-Bem-vindos/dp/8560280944)"
+            "https://www.amazon.com.br/coisa-livro-origem-s%C3%A9rie-Bem-vindos/dp/8560280944"
         ),
         LivroTerror(
             "Drácula", "Bram Stoker",
             "Jonathan Harker viaja para a Transilvânia para finalizar a compra de uma propriedade pelo excêntrico Conde Drácula. Após descobrir que o conde é um vampiro, um grupo de heróis liderado pelo professor Van Helsing se une para caçá-lo em Londres.",
             R.drawable.dracula,
-            "[amazon.com.br](https://www.amazon.com.br/Dr%C3%A1cula-Bram-Stoker/dp/6555520000)"
+            "https://www.amazon.com.br/Dr%C3%A1cula-Bram-Stoker/dp/6555520000"
         ),
         LivroTerror(
             "O Exorcista", "William Peter Blatty",
             "Uma mãe percebe que sua filha de 12 anos está sendo possuída por uma entidade demoníaca. Desesperada, ela recorre a dois padres para realizar um exorcismo. Um dos livros de terror mais perturbadores já escritos.",
             R.drawable.exorcista,
-            "[amazon.com.br](https://www.amazon.com.br/Exorcista-William-Peter-Blatty/dp/8595086230)"
+            "https://www.amazon.com.br/Exorcista-William-Peter-Blatty/dp/8595086230"
         )
     )
 
@@ -92,7 +93,7 @@ fun ListaLivrosTerrorScreen() {
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false },
-                            containerColor = CardHeaderRed
+                            containerColor = RedDark
                         ) {
                             DropdownMenuItem(
                                 text = { Text("Página Inicial", fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.SansSerif) },
@@ -122,13 +123,30 @@ fun ListaLivrosTerrorScreen() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = CardContentPink)
             )
+        },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
+                Text(
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(BackgroundCoral)
+                .background(RedPrimary)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

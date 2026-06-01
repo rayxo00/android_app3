@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,10 +33,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-// Rosa bebê para os títulos e labels
 val BabyPink = Color(0xFFFFB6C1)
 
-// Função para validar e-mail
 fun isEmailValido(email: String): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }
@@ -111,13 +110,30 @@ fun ComentariosScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = CardContentPink)
             )
+        },
+        bottomBar = {
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = RedDark
+            ) {
+                Text(
+                    text = "©️ 2026 Dreamy Pages - Seu refúgio literário",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 10.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     ) { paddingValues ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BackgroundCoral)
+                .background(RedPrimary)
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
@@ -181,7 +197,7 @@ fun ComentariosScreen(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.SansSerif,
-                color = BabyPink
+                color = Color.White
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -223,7 +239,7 @@ fun ComentariosScreen(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.SansSerif,
-                color = BabyPink
+                color = Color.White
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -237,11 +253,10 @@ fun ComentariosScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Campo de e-mail com validação
             Column {
                 Text(
                     text = "E-mail",
-                    color = BabyPink,
+                    color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 17.sp,
@@ -280,7 +295,7 @@ fun ComentariosScreen(
                         if (emailError) {
                             Text(
                                 text = "Por favor, insira um e-mail válido (ex: seu@email.com)",
-                                color = Color.Red,
+                                color = Color.White,
                                 fontSize = 12.sp,
                                 fontFamily = FontFamily.SansSerif
                             )
@@ -293,7 +308,7 @@ fun ComentariosScreen(
 
             Text(
                 text = "Comentário",
-                color = BabyPink,
+                color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.SansSerif,
                 fontSize = 17.sp,
@@ -317,7 +332,7 @@ fun ComentariosScreen(
                 shape = RoundedCornerShape(8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = CardHeaderRed,
-                    unfocusedBorderColor = Color.Gray,
+                    unfocusedBorderColor = Color.Black,
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
                     focusedTextColor = Color.Black,
@@ -430,7 +445,7 @@ fun CommentInputField(
     Column {
         Text(
             text = label,
-            color = BabyPink,
+            color = Color.White,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.SansSerif,
             fontSize = 17.sp,

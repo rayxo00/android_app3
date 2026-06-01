@@ -105,7 +105,7 @@ fun FavoritosScreen() {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                modifier = Modifier.height(70.dp),
+                modifier = Modifier.height(78.dp),
                 title = {
                     Box(
                         modifier = Modifier.fillMaxHeight(),
