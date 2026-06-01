@@ -80,7 +80,7 @@ fun ListaLivrosSuspenseScreen() {
                     Text(
                         "Livros de Suspense/Mistério",
                         fontSize = 18.sp,
-                        color = CardHeaderRed,
+                        color = RedDark,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif
                     )
@@ -88,7 +88,7 @@ fun ListaLivrosSuspenseScreen() {
                 actions = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = CardHeaderRed)
+                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = RedDark,modifier = Modifier.size(35.dp))
                         }
                         DropdownMenu(
                             expanded = menuExpanded,
@@ -234,11 +234,11 @@ fun SuspenseBookCard(livro: LivroSuspense, onBuyClick: () -> Unit) {
                         colors = ButtonDefaults.buttonColors(containerColor = CardContentPink),
                         shape = RoundedCornerShape(4.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-                    ) { Text("Comentários", color = CardHeaderRed, fontSize = 12.sp, maxLines = 1, fontFamily = FontFamily.SansSerif) }
+                    ) { Text("Comentários", color = RedDark, fontSize = 12.sp, maxLines = 1, fontFamily = FontFamily.SansSerif) }
                     Button(
                         onClick = onBuyClick,
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = CardHeaderRed),
+                        colors = ButtonDefaults.buttonColors(containerColor = RedDark),
                         shape = RoundedCornerShape(4.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
                     ) { Text("Comprar", color = Color.White, fontSize = 12.sp, maxLines = 1, fontFamily = FontFamily.SansSerif) }

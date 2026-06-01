@@ -97,7 +97,7 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
         ) {
             Text(
                 text = "Dreamy Pages",
-                color = TextRed,
+                color = RedDark,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Serif,
@@ -108,9 +108,9 @@ fun DreamyPagesTopBar(modifier: Modifier = Modifier) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Menu",
-                    tint = TextRed,
+                    tint = RedDark,
                     modifier = Modifier
-                        .size(43.dp)
+                        .size(35.dp)
                         .clickable { menuExpanded = true }
                 )
 
@@ -168,7 +168,7 @@ fun InfoCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(CardHeaderRed)
+                    .background(RedDark)
                     .padding(vertical = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -201,21 +201,21 @@ fun SobreNosSection(modifier: Modifier = Modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text(
                 text = "Bem-vindo ao Dreamy Pages, seu blog literário favorito!",
-                color = TextRed,
+                color = RedDark,
                 fontSize = 13.sp,
                 textAlign = TextAlign.Start,
                 lineHeight = 18.sp
             )
             Text(
                 text = "Aqui você encontra resenhas, dicas e novidades sobre os melhores livros.",
-                color = TextRed,
+                color = RedDark,
                 fontSize = 13.sp,
                 textAlign = TextAlign.Start,
                 lineHeight = 18.sp
             )
             Text(
                 text = "Nossa missão é aproximar leitores de histórias incríveis.",
-                color = TextRed,
+                color = RedDark,
                 fontSize = 13.sp,
                 textAlign = TextAlign.Start,
                 lineHeight = 18.sp
@@ -249,7 +249,7 @@ fun TemasDeLivrosSection(modifier: Modifier = Modifier) {
             genreMap.forEach { (genre, activityClass) ->
                 Text(
                     text = genre,
-                    color = TextRed,
+                    color = RedDark,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Serif,

@@ -93,7 +93,7 @@ fun ComentariosScreen(
                 title = {
                     Text(
                         "Comentários - $livroTitulo ($categoria)",
-                        color = CardHeaderRed,
+                        color = RedDark,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.SansSerif,
                         fontSize = 18.sp
@@ -104,7 +104,7 @@ fun ComentariosScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Voltar",
-                            tint = CardHeaderRed
+                            tint = RedDark
                         )
                     }
                 },
@@ -156,8 +156,8 @@ fun ComentariosScreen(
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text(
-                            text = "Publicado por Dreamy Pages - 05/11/2023",
-                            color = CardHeaderRed,
+                            text = "Publicado por Dreamy Pages - 05/11/2025",
+                            color = RedDark,
                             fontWeight = FontWeight.Bold,
                             fontFamily = FontFamily.SansSerif,
                             fontSize = 12.sp
@@ -173,7 +173,7 @@ fun ComentariosScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Resumo rápido",
-                            color = CardHeaderRed,
+                            color = RedDark,
                             fontWeight = FontWeight.Bold,
                             fontFamily = FontFamily.SansSerif,
                             fontSize = 12.sp
@@ -379,7 +379,7 @@ fun ComentariosScreen(
                     }
                 },
                 modifier = Modifier.align(Alignment.End),
-                colors = ButtonDefaults.buttonColors(containerColor = CardHeaderRed),
+                colors = ButtonDefaults.buttonColors(containerColor = RedDark),
                 shape = RoundedCornerShape(4.dp)
             ) {
                 Text(

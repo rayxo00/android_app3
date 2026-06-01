@@ -146,7 +146,7 @@ fun FavoritosScreen() {
                                     Icons.Default.Menu,
                                     contentDescription = "Menu",
                                     tint = RedDark,
-                                    modifier = Modifier.size(32.dp)
+                                    modifier = Modifier.size(35.dp)
                                 )
                             }
                             DropdownMenu(

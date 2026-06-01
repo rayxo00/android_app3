@@ -83,14 +83,14 @@ fun SuporteScreen() {
                     Icon(
                         Icons.Default.Email,
                         contentDescription = null,
-                        tint = TextRed,
-                        modifier = Modifier.padding(start = 30.dp)
+                        tint = RedDark,
+                        modifier = Modifier.padding(start = 35.dp)
                     )
                 },
                 actions = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = TextRed)
+                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = RedDark,modifier = Modifier.size(35.dp))
                         }
                         DropdownMenu(
                             expanded = menuExpanded,
@@ -202,7 +202,7 @@ fun SuporteScreen() {
                         Column(modifier = Modifier.testTag("email_field")) {
                             Text(
                                 "E-mail",
-                                color = TextRed,
+                                color = RedDark,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(bottom = 4.dp)
@@ -283,7 +283,7 @@ fun SuporteScreen() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .testTag("enviar_button"),
-                            colors = ButtonDefaults.buttonColors(containerColor = CardHeaderRed),
+                            colors = ButtonDefaults.buttonColors(containerColor = RedDark),
                             enabled = !enviando
                         ) {
                             if (enviando) CircularProgressIndicator(
@@ -324,7 +324,7 @@ fun SuporteCard(title: String, content: @Composable () -> Unit) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
                 title,
-                color = TextRed,
+                color = RedDark,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -349,7 +349,7 @@ fun SuporteTextField(
     Column(modifier = modifier) {
         Text(
             label,
-            color = TextRed,
+            color = RedDark,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 4.dp)
@@ -374,7 +374,7 @@ fun SuporteTextField(
 @Composable
 fun FAQItem(pergunta: String, resposta: String) {
     Column {
-        Text(pergunta, color = TextRed, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+        Text(pergunta, color = RedDark, fontWeight = FontWeight.Bold, fontSize = 13.sp)
         Text(resposta, color = Color.DarkGray, fontSize = 12.sp, lineHeight = 16.sp)
     }
 }
